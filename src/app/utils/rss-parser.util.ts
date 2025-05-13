@@ -24,14 +24,14 @@ export function parseRssToArticles(xmlString: string): Article[] {
     const extractTag = (tagName: string): string => {
       const tagRegex = new RegExp(`<${tagName}>([\\s\\S]*?)<\\/${tagName}>`);
       const result = itemXml.match(tagRegex);
-      console.log('extractTag: ', tagName, ': ', result);
+      // console.log('extractTag: ', tagName, ': ', result);
       return result ? result[1].trim() : '';
     };
 
     const extractMediaUrl = (): string => {
       const mediaRegex = /<media:content[^>]+url="([^"]+)"/;
       const result = itemXml.match(mediaRegex);
-      console.log('extractMediaUrl', result);
+      // console.log('extractMediaUrl', result);
       return result ? result[1] : '';
     };
 
