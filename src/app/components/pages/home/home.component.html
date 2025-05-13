@@ -7,7 +7,7 @@
       *ngFor="let subject of group.subjects"
       style="display: flex; width: fit-content"
     >
-      <a [href]="getLink(subject)">
+      <a [routerLink]="['/subject', subject]">
         {{ subject }}
       </a>
     </div>

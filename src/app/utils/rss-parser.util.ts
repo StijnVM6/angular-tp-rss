@@ -36,3 +36,19 @@ export function parseRssToArticles(xmlString: string): Article[] {
 
   return articles;
 }
+
+export function parseSubjectForUrl(subjectRaw: string) {
+  const cuts = ['a', 'le', 'la', 'un', 'une'];
+
+  let words = subjectRaw.toLowerCase().split(' ');
+
+  while (words.length > 1 && cuts.includes(words[0])) {
+    words.shift();
+  }
+
+  let subject = words.join('_');
+  subject = subject.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+  console.log(`subject parse: "${subject}"`);
+  return subject;
+}

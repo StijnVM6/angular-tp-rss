@@ -1,16 +1,21 @@
-<div class="article">
-  <h2>
-    <a [href]="article.link" target="_blank">{{ article.title }}</a>
-  </h2>
-  <p>
-    <em>{{ article.pubDate }}</em>
-  </p>
-  <img
-    *ngIf="article.imageUrl"
-    [src]="article.imageUrl"
-    alt="Article image"
-    width="300"
-  />
-
-  <p [innerHTML]="article.description"></p>
+<div class="article" *ngIf="articles.length > 0; else noArticles">
+  <div *ngFor="let article of articles" class="article">
+    <h2>
+      <a [href]="article.link" target="_blank">{{ article.title }}</a>
+    </h2>
+    <p>
+      <em>{{ article.pubDate }}</em>
+    </p>
+    <img
+      *ngIf="article.imageUrl"
+      [src]="article.imageUrl"
+      alt="Article image"
+      width="300"
+    />
+    <p [innerHTML]="article.description"></p>
+  </div>
 </div>
+
+<ng-template #noArticles>
+  <p>No articles available for this subject.</p>
+</ng-template>
