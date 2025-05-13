@@ -1,4 +1,15 @@
-<h1>Le Monde Articles - biologie</h1>
-<div *ngFor="let article of articles">
-  <app-article [article]="article"></app-article>
+<h1>Le Monde Articles</h1>
+<div *ngFor="let group of subjectGroups" class="group">
+  <h3>{{ group.group }}</h3>
+  <div class="subjects" style="display: flex; flex-wrap: wrap; gap: 10px">
+    <div
+      class="div"
+      *ngFor="let subject of group.subjects"
+      style="display: flex; width: fit-content"
+    >
+      <a [href]="getLink(subject)">
+        {{ subject }}
+      </a>
+    </div>
+  </div>
 </div>
