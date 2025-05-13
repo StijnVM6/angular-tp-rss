@@ -3,7 +3,6 @@ export interface Article {
   link: string;
   description: string;
   pubDate: string;
-  guid: string;
   imageUrl: string;
 }
 export interface SubjectGroup {

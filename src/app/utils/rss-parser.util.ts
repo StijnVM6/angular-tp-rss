@@ -12,27 +12,51 @@ function formatDate(raw: string): string {
 }
 
 export function parseRssToArticles(xmlString: string): Article[] {
-  const parser = new DOMParser();
-  const xml = parser.parseFromString(xmlString, 'text/xml');
-  const items = Array.from(xml.querySelectorAll('item'));
+  const articles: Article[] = [];
 
-  const articles = items.map((item) => {
-    const mediaContent = item.getElementsByTagName('media:content')[0];
+  // Match <item> block
+  const itemRegex = /<item>([\s\S]*?)<\/item>/g;
+  const matches = xmlString.matchAll(itemRegex);
 
-    const rawDate = item.querySelector('pubDate')?.textContent ?? '';
-    const formattedDate = formatDate(rawDate);
+  for (const match of matches) {
+    const itemXml = match[1];
 
-    const obj = {
-      title: item.querySelector('title')?.textContent ?? '',
-      link: item.querySelector('link')?.textContent ?? '',
-      pubDate: formattedDate,
-      description: item.querySelector('description')?.textContent ?? '',
-      guid: item.querySelector('guid')?.textContent ?? '',
-      imageUrl: mediaContent?.getAttribute('url') ?? '',
+    const extractTag = (tagName: string): string => {
+      const tagRegex = new RegExp(`<${tagName}>([\\s\\S]*?)<\\/${tagName}>`);
+      const result = itemXml.match(tagRegex);
+      console.log('extractTag: ', tagName, ': ', result);
+      return result ? result[1].trim() : '';
     };
 
-    return obj;
-  });
+    const extractMediaUrl = (): string => {
+      const mediaRegex = /<media:content[^>]+url="([^"]+)"/;
+      const result = itemXml.match(mediaRegex);
+      console.log('extractMediaUrl', result);
+      return result ? result[1] : '';
+    };
+
+    const rawTitle = extractTag('title')
+      .replace('<![CDATA[', '')
+      .replace(']]>', '');
+    const rawLink = extractTag('link');
+    const rawPubDate = extractTag('pubDate');
+    const rawDescription = extractTag('description')
+      .replace('<![CDATA[', '')
+      .replace(']]>', '');
+    const imageUrl = extractMediaUrl();
+
+    const formattedDate = formatDate(rawPubDate);
+
+    const article: Article = {
+      title: rawTitle,
+      link: rawLink,
+      pubDate: formattedDate,
+      description: rawDescription,
+      imageUrl: imageUrl,
+    };
+
+    articles.push(article);
+  }
 
   return articles;
 }
