@@ -1,0 +1,16 @@
+<div class="article">
+  <h2>
+    <a [href]="article.link" target="_blank">{{ article.title }}</a>
+  </h2>
+  <p>
+    <em>{{ article.pubDate }}</em>
+  </p>
+  <img
+    *ngIf="article.imageUrl"
+    [src]="article.imageUrl"
+    alt="Article image"
+    width="300"
+  />
+
+  <p [innerHTML]="article.description"></p>
+</div>
